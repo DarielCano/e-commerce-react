@@ -1,0 +1,16 @@
+.shop-cart {
+    width: 3rem;
+    position: relative;
+    cursor: pointer;
+}
+
+
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: absolute;
+    top: -30px;
+    right: -1px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+}
