@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap');
 
 :root {
   --primario: #9c27b0;
@@ -8,6 +9,7 @@
   --blanco: #fff;
   --negro: #000;
   --fuente-principal: 'Staatliches', cursive;
+  --fuente-secundaria: 'Roboto', sans-serif;
 }
 
 
@@ -18,6 +20,7 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   font-family: var(--fuente-principal);
+  background-color: var(--primario);
 }
 
 *,
@@ -37,9 +40,7 @@ a {
   transition: all 0.5s ease-out;
 }
 
-a:hover {
-  opacity: 0.75;
-}
+
 
 h1 {
   margin: 0;
@@ -76,4 +77,6 @@ li {
 .myApp {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
+  height: auto;
 }

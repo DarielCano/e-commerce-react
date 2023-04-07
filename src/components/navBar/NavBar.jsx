@@ -2,31 +2,46 @@ import React from "react";
 import "../../stylesheet/Navbar.css";
 import CartWidget from "./CartWidget";
 import logoStore from "../../assets/logo.png";
+import { Link, NavLink } from "react-router-dom";
+import "../../stylesheet/gral-styles/site-styles.css";
 
-function Navbar({}) {
+function Navbar({ numProd }) {
   return (
     <div className="navbar">
-      <a href="#" className="logo">
+      <Link to="/e-commerce-react/" className="logo">
         <img src={logoStore} alt="logo store" />
-      </a>
+      </Link>
+
       <div className="navBar_right">
         <nav>
           <ul className="navbar__links">
-            <li>
-              <a href="#">Camisas</a>
-            </li>
-            <li>
-              <a href="#">Tenis</a>
-            </li>
-            <li>
-              <a href="#">Bermudas</a>
-            </li>
-            <li>
-              <a href="#">Sudaderas</a>
-            </li>
+            <NavLink
+              to={"/e-commerce-react/category/playeras"}
+              className={({ isActive }) =>
+                isActive ? "is-active enlace" : "enlace"
+              }
+            >
+              Playeras
+            </NavLink>
+            <NavLink
+              to={"/e-commerce-react/category/gorras"}
+              className={({ isActive }) =>
+                isActive ? "is-active enlace" : "enlace"
+              }
+            >
+              Gorras
+            </NavLink>
+            <NavLink
+              to={"/e-commerce-react/category/sudaderas"}
+              className={({ isActive }) =>
+                isActive ? "is-active enlace" : "enlace"
+              }
+            >
+              Sudaderas
+            </NavLink>
           </ul>
         </nav>
-        <CartWidget numProd={0} />
+        <CartWidget numProd={numProd} />
       </div>
     </div>
   );

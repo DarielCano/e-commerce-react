@@ -1,0 +1,43 @@
+.item-action {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+}
+
+.addDeleteCant {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    /*  align-items: center; */
+    background-color: white;
+    margin-right: 1rem;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+
+}
+
+.cant {
+    color: var(--primarioOscuro);
+    font-weight: bold;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+@media screen and (min-width:600px) {
+    .addDeleteCant {
+        width: 50%;
+        margin-bottom: 0;
+    }
+
+    .item-action {
+        flex-direction: row;
+    }
+}
