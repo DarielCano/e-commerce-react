@@ -4,6 +4,8 @@ import CartWidget from "./CartWidget";
 import logoStore from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import "../../stylesheet/gral-styles/site-styles.css";
+import { AiOutlineMenu } from "react-icons/ai";
+import { TbUserOff } from "react-icons/tb";
 
 function Navbar({ numProd }) {
   return (
@@ -41,7 +43,11 @@ function Navbar({ numProd }) {
             </NavLink>
           </ul>
         </nav>
-        <CartWidget numProd={numProd} />
+        <div className="right-icons">
+          <TbUserOff className="userOff-btn" />
+          <AiOutlineMenu className="burguer-btn" />
+          <CartWidget numProd={numProd} />
+        </div>
       </div>
     </div>
   );

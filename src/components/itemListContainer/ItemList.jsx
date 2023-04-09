@@ -1,5 +1,4 @@
 import Item from "./Item";
-import { v4 as uuidv4 } from "uuid";
 import "../../stylesheet/ItemListContainer.css";
 
 function ItemList({ productos }) {

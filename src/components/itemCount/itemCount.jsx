@@ -23,7 +23,7 @@ function ItemCount({ stock, initial, onAdd }) {
         {cantItem}
         <AiOutlinePlus className="cant" onClick={addItem} />
       </div>
-      <button className="btn" onClick={() => onAdd(cantItem)}>
+      <button className="btn btn-50" onClick={() => onAdd(cantItem)}>
         Agregar al carrito
       </button>
     </div>

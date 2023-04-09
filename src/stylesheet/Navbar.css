@@ -8,13 +8,13 @@
     justify-content: space-between;
     align-items: center;
     background-color: var(--primarioOscuro);
-    padding: 1rem;
+    padding: 0.2rem 1rem;
 
 
 }
 
 .logo {
-    width: 50%;
+    width: 30%;
 }
 
 .logo img {
@@ -47,10 +47,46 @@
 
 }
 
-
-
 .enlace:hover {
     opacity: 0.75;
     transition: all 0.5s ease;
     scale: 1.2;
+}
+
+.burguer-btn {
+    fill: var(--blanco);
+    width: 3rem;
+    height: 3rem;
+    margin-top: 0.5rem;
+    display: none;
+    cursor: pointer;
+}
+
+.userOff-btn {
+    color: var(--blanco);
+    width: 3rem;
+    height: 3rem;
+    margin-top: 0.8rem;
+    grid-column: 2;
+    grid-row: 1;
+    cursor: pointer;
+}
+
+.right-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+@media screen and (max-width:800px) {
+
+    .navbar__links {
+        display: none;
+    }
+
+    .burguer-btn {
+        display: block;
+        grid-column: 3;
+    }
+
 }

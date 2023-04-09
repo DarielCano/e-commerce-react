@@ -8,6 +8,7 @@ import "../../stylesheet/Filter.css";
 import { useParams } from "react-router-dom";
 
 function ItemListContainer() {
+  let isCid = "";
   let { cid } = useParams();
 
   let [productos, setProductos] = useState([]);
@@ -28,7 +29,6 @@ function ItemListContainer() {
   }, [cid]);
 
   const handleFilterChange = (e) => {
-    console.log(e.target.value);
     setFilterState(e.target.value);
   };
 
