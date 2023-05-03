@@ -1,7 +1,14 @@
-import React from "react";
-import "../../stylesheet/CartWidget.css";
+import { useContext } from "react";
 
-function CartWidget({ numProd }) {
+import { CartContext } from "../../context/CartContext";
+
+import "./CartWidget.css";
+
+function CartWidget() {
+  const { cartNumProd } = useContext(CartContext);
+
+  const numProd = cartNumProd();
+
   return (
     <div className="shop-cart">
       <div className="shop-cart-icon">

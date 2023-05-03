@@ -2,7 +2,6 @@
      width: 100%;
      padding-top: 8rem;
 
-     background-color: var(--primario);
      display: flex;
      flex-direction: column;
      justify-content: center;
@@ -28,12 +27,4 @@
 
      }
 
- }
-
- .loaderIcon {
-     width: 100%;
-     height: 100vh;
-     display: flex;
-     align-items: center;
-     justify-content: center;
  }

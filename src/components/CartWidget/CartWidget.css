@@ -1,17 +1,15 @@
 .shop-cart {
-    padding-top: 1rem;
+    padding-top: 0.5rem;
     width: 3rem;
     position: relative;
     cursor: pointer;
     grid-column: 3;
 }
 
-
-
 .shop-cart p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: absolute;
-    top: -20px;
+    top: -27px;
     right: -2px;
     font-size: 1.2rem;
     font-weight: bold;
@@ -20,7 +18,7 @@
 
 @media screen and (max-width:800px) {
     .shop-cart {
-        grid-column: 1;
+        grid-column: 2;
         grid-row: 1;
     }
 }

@@ -1,5 +1,4 @@
 .btn {
-
     width: 100%;
     background-color: var(--secundario);
     font-size: 1rem;
@@ -8,22 +7,33 @@
     padding: 1rem 0.5rem;
     transition: opacity 0.5s ease;
     cursor: pointer;
+    font-family: var(--fuente-btn);
     text-transform: uppercase;
     border: 0;
     border-radius: 10px;
+    text-align: center;
 }
 
 .btn:hover {
     opacity: 0.8;
 }
 
+.mgt-1 {
+    margin-top: 1rem;
+}
+
 .wd-90 {
     width: 100%;
+    max-width: 30rem;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
-.is-active {
-    color: var(--secundario)
+a.is-active {
+    color:
+        var(--secundario);
+
 }
 
 .link-btn {
@@ -32,15 +42,34 @@
 
 .none {
     display: none;
+    transition: all 1s ease;
 }
 
+.opacity {
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+.loader-content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    justify-self: center;
+}
+
+
 @media screen and (min-width:600px) {
-    .btn {
-        width: 100%;
-    }
 
     .btn-50 {
         width: 50%;
+
+    }
+
+    .mgt-1 {
+        margin-top: 0;
 
     }
 

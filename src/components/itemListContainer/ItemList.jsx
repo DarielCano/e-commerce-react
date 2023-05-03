@@ -1,5 +1,6 @@
 import Item from "./Item";
-import "../../stylesheet/ItemListContainer.css";
+
+import "./ItemListContainer.css";
 
 function ItemList({ productos }) {
   return (

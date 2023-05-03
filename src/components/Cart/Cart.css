@@ -1,0 +1,161 @@
+.cartEmpty {
+    width: 80%;
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cart-user {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: thin solid white;
+    border-radius: 10px;
+
+}
+
+.cart-user strong {
+    margin-left: 10px;
+    font-family: var(--fuente-btn);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.cart-user strong p {
+    font-size: 1rem;
+    text-decoration: underline;
+    color: var(--secundario);
+
+}
+
+.cartView {
+    width: 80%;
+    margin-top: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cartEmpty h2 {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--blanco);
+}
+
+.cartView table {
+    width: 100%;
+    color: var(--blanco);
+
+}
+
+.cartView table thead {
+    font-size: 1.6rem;
+
+}
+
+th {
+    border-bottom: thin solid var(--blanco);
+    padding-bottom: 1rem;
+}
+
+tbody {
+    text-align: center;
+    font-size: 1.2rem;
+
+}
+
+td {
+
+    padding: 1rem 1rem;
+}
+
+.deleteBtn {
+    width: 2rem;
+    height: 2rem;
+}
+
+.deleteBtn:hover {
+    transition: color 0.5s ease;
+    cursor: pointer;
+    color: red
+}
+
+.shop-Id {
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.shop-Id-search {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchShopId-error {
+    background-color: red;
+
+}
+
+.shop-Id input {
+
+    height: 3rem;
+    margin-right: 0.5rem;
+    border-radius: 10px;
+    padding-left: 1rem;
+}
+
+.shop-Id p {
+    color: var(--blanco);
+    font-size: 1.5rem;
+
+}
+
+.cartBtn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 25rem;
+}
+
+.amount {
+    width: 100%;
+    border-top: 1px solid var(--blanco);
+}
+
+.amount p {
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    color: var(--blanco);
+    text-align: center;
+}
+
+.amount p strong {
+    font-size: 2rem;
+    margin-left: 1rem;
+
+}
+
+@media screen and (min-width:700px) {
+    .cart-user strong {
+        flex-direction: row;
+    }
+
+    .cart-user strong p {
+        margin-left: 2rem;
+    }
+}

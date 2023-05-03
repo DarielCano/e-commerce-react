@@ -1,30 +1,48 @@
 import { useEffect, useState } from "react";
-import "../../stylesheet/ItemListContainer.css";
-import ItemList from "./ItemList";
-import { mockFetch } from "../../js/mock";
-import loaderIcon from "../../assets/loader.svg";
 import { CiSearch } from "react-icons/ci";
-import "../../stylesheet/Filter.css";
 import { useParams } from "react-router-dom";
 
+import ItemList from "./ItemList";
+import Loader from "../Loader/Loader";
+
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/config";
+
+import "./ItemListContainer.css";
+import "../../stylesheet/Filter.css";
+
 function ItemListContainer() {
-  let isCid = "";
   let { cid } = useParams();
 
   let [productos, setProductos] = useState([]);
+  let [loading, setLoading] = useState(true);
   const [filterState, setFilterState] = useState("");
 
   useEffect(() => {
     if (!cid) {
-      mockFetch()
-        .then((resp) => setProductos(resp))
-        .catch((err) => console.log(err));
-    } else {
-      mockFetch()
+      const q = query(collection(db, "productos"));
+      getDocs(q)
         .then((resp) =>
-          setProductos(resp.filter((prod) => prod.category === cid))
+          setProductos(
+            resp.docs.map((prod) => ({ id: prod.id, ...prod.data() }))
+          )
         )
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    } else {
+      const q = query(
+        collection(db, "productos"),
+        where("category", "==", `${cid}`)
+      );
+
+      getDocs(q)
+        .then((resp) =>
+          setProductos(
+            resp.docs.map((prod) => ({ id: prod.id, ...prod.data() }))
+          )
+        )
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
     }
   }, [cid]);
 
@@ -32,10 +50,10 @@ function ItemListContainer() {
     setFilterState(e.target.value);
   };
 
-  if (productos.length === 0) {
+  if (loading) {
     return (
-      <div className="loaderIcon">
-        <img src={loaderIcon} alt="icono de carga" />
+      <div className="loader-content">
+        <Loader />
       </div>
     );
   } else {
@@ -44,6 +62,7 @@ function ItemListContainer() {
         <div className="filter">
           <input
             type="text"
+            placeholder="Buscar producto"
             value={filterState}
             onChange={handleFilterChange}
           />
