@@ -6,7 +6,7 @@ import { CartContext } from "../../context/CartContext";
 import "../../stylesheet/gral-styles/site-styles.css";
 import "../../stylesheet/cards.css";
 
-function Item({ id, title, price, src, description }) {
+function Item({ id, title, price, src, description, stock }) {
   const { addToCart } = useContext(CartContext);
   const item = {
     id,
@@ -14,6 +14,7 @@ function Item({ id, title, price, src, description }) {
     price,
     src,
     description,
+    stock,
   };
 
   return (

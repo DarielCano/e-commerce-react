@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
-import loginImg from "../../../public/img/nosotros.jpg";
+import loginImg from "../../../public/nosotros.jpg";
 import logoStore from "../../assets/logo.png";
 import Loader from "../Loader/Loader";
 
