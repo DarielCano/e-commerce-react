@@ -3,7 +3,8 @@ import { useContext } from "react";
 
 import "./Select.css";
 
-const Select = ({ quant, stock }) => {
+const Select = ({ prodData }) => {
+  const { quantity, stock } = prodData;
   const { setOptionValue } = useContext(CartContext);
   let numList = [];
   {
@@ -15,11 +16,15 @@ const Select = ({ quant, stock }) => {
   return (
     <>
       <select name="select" onChange={(e) => setOptionValue(e.target.value)}>
-        <option selected key={100} value={`${quant}`}>{`${quant}`}</option>
+        <option
+          selected
+          key={quantity}
+          value={`${quantity}`}
+        >{`${quantity}`}</option>
 
         {numList.map((n) => {
-          if (n != quant) {
-            return <option key={n} value={`${n}`}>{`${n}`}</option>;
+          if (n != quantity) {
+            return <option key={n} value={`${n + 1}`}>{`${n + 1}`}</option>;
           }
         })}
       </select>

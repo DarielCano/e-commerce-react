@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 
 import "./Cart.css";
 import "../../stylesheet/gral-styles/site-styles.css";
+import Select from "../Select/Select";
 
 export default function Cart() {
   const { cartList, removeList, Amount } = useContext(CartContext);
