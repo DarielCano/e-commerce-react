@@ -17,12 +17,11 @@ function Navbar({ navBarBg }) {
   const { setSession } = useContext(AuthContext);
   let menu = useRef();
   const nav = useRef();
-  let navigate = useNavigate();
 
   const closeSesion = async () => {
     try {
       const userClose = await signOut(auth);
-      /* navigate("/e-commerce-react/"); */
+
       setSession(false);
     } catch {
       (error) => {

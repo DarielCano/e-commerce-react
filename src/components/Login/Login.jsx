@@ -46,6 +46,8 @@ const validationsForm = (form) => {
 
   if (!form.phone) {
     errors.phone = "El campo teléfono es requerido ";
+  } else if (isNaN(form.phone)) {
+    errors.phone = "Solo se aceptan números en el teléfono ";
   }
 
   if (!form.password.trim()) {

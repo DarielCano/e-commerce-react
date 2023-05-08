@@ -15,8 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
-  const { session, user } = useContext(AuthContext);
-  console.log(session);
+  const { session } = useContext(AuthContext);
 
   useEffect(() => {
     if (session) {
@@ -26,6 +25,8 @@ function App() {
           text: "Ya puede comenzar a comprar con nosotros!!! ",
         });
       }, 1000);
+    } else {
+      <Navigate to="/e-commerce-react/" />;
     }
   }, [session]);
 
