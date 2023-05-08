@@ -1,5 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,11 +18,18 @@ export function CartContextProvider({ children }) {
     }
   });
   const [cantItem, setCantItem] = useState(1);
-  const [optionValue, setOptionValue] = useState("");
+  const [lastItem, setLastItem] = useState({ id: "", stock: 0 });
 
   useEffect(() => {
     localStorage.setItem("cartList", JSON.stringify(cartList));
   }, [cartList]);
+
+  /* actualizar base de datos */
+  const updateStock = (id, stock) => {
+    updateDoc(doc(db, "productos", `${id}`), {
+      stock: stock,
+    });
+  };
 
   /* agregar producto */
   const addToCart = (product) => {
@@ -27,31 +37,67 @@ export function CartContextProvider({ children }) {
       (prod) => prod.item.id === product.item.id
     );
     if (prodIndex === -1) {
-      product.amount = product.quantity * product.item.price;
-      setCartList([...cartList, product]);
+      product.item.stock = product.item.stock - product.quantity;
+
+      if (product.item.stock >= 0) {
+        product.amount = product.quantity * product.item.price;
+        setLastItem({ id: product.item.id, stock: product.item.stock });
+        updateStock(product.item.id, product.item.stock);
+        setCartList([...cartList, product]);
+        setCantItem(1);
+        toast("Agregado al Carrito", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          type: "success",
+        });
+      }
     } else {
-      cartList[prodIndex].quantity =
-        cartList[prodIndex].quantity + product.quantity;
-      cartList[prodIndex].amount =
-        cartList[prodIndex].quantity * cartList[prodIndex].item.price;
-      setCartList([...cartList]);
+      cartList[prodIndex].item.stock =
+        cartList[prodIndex].item.stock - cartList[prodIndex].quantity;
+
+      if (cartList[prodIndex].item.stock >= 0) {
+        cartList[prodIndex].quantity =
+          cartList[prodIndex].quantity + product.quantity;
+        cartList[prodIndex].amount =
+          cartList[prodIndex].quantity * cartList[prodIndex].item.price;
+        setLastItem({
+          id: cartList[prodIndex].item.stock,
+          stock: cartList[prodIndex].item.stock,
+        });
+        updateStock(
+          cartList[prodIndex].item.id,
+          cartList[prodIndex].item.stock
+        );
+        setCartList([...cartList]);
+        setCantItem(1);
+        toast("Agregado al Carrito", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          type: "success",
+        });
+      }
     }
-    setCantItem(1);
-    toast("Agregado al Carrito", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      type: "success",
-    });
   };
 
   /* eliminar producto */
   const deleteItem = (id) => {
+    const prodToDelete = cartList.find((el) => el.item.id == id);
+    prodToDelete.item.stock = prodToDelete.item.stock + prodToDelete.quantity;
+
+    updateStock(id, prodToDelete.item.stock);
+
     setCartList(cartList.filter((el) => el.item.id !== id));
+
     toast("Eliminado del Carrito", {
       position: "top-right",
       autoClose: 2000,
@@ -65,7 +111,17 @@ export function CartContextProvider({ children }) {
   };
 
   /* eliminar carrito */
-  const removeList = () => {
+  const removeList = (compra = false) => {
+    if (!compra) {
+      cartList.forEach((el) => {
+        el.item.stock = el.item.stock + el.quantity;
+        setLastItem({
+          id: el.item.id,
+          stock: el.item.stock,
+        });
+        updateStock(el.item.id, el.item.stock);
+      });
+    }
     setCartList([]);
   };
 
@@ -105,10 +161,24 @@ export function CartContextProvider({ children }) {
   ///////////////////////////////////////////////////////////
 
   /* Funciones selector de productos en el carrito */
-  const updateQuantity = (id) => {
+  const updateQuantity = (e, id) => {
     let index = cartList.findIndex((prod) => prod.item.id === id);
-    cartList[index].quantity = optionValue;
+
+    const newQuantity = parseInt(e.target.value);
+
+    if (newQuantity < cartList[index].quantity) {
+      cartList[index].item.stock =
+        cartList[index].item.stock + (cartList[index].quantity - newQuantity);
+      cartList[index].quantity = newQuantity;
+    } else if (newQuantity > cartList[index].quantity) {
+      cartList[index].item.stock =
+        cartList[index].item.stock - (newQuantity - cartList[index].quantity);
+      cartList[index].quantity = newQuantity;
+    }
+    cartList[index].amount =
+      cartList[index].quantity * cartList[index].item.price;
     setCartList([...cartList]);
+    updateStock(id, cartList[index].item.stock);
   };
 
   ////////////////////////////////////////////////////////////
@@ -124,7 +194,8 @@ export function CartContextProvider({ children }) {
         substractItem,
         addItem,
         cantItem,
-        setOptionValue,
+        lastItem,
+        updateQuantity,
       }}
     >
       {children}

@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
 
 import { ToastContainer } from "react-toastify";
 
 import Login from "./components/Login/Login";
 import AppRoutes from "./route/AppRoutes";
+import { AuthContext } from "./context/AuthContext";
 
 import { auth } from "./firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
 
 import Swal from "sweetalert2";
 
@@ -15,26 +15,18 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
-  const [session, setSession] = useState(false);
+  const { session, user } = useContext(AuthContext);
+  console.log(session);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (user.emailVerified || user.emailVerified != null) {
-          if (session == false) {
-            const timer = setTimeout(() => {
-              Swal.fire({
-                title: `Bienvenid@ ${auth.currentUser.displayName}`,
-                text: "Ya puede comenzar a comprar con nosotros",
-              });
-            }, 2000);
-            setSession(true);
-          }
-        }
-      } else {
-        setSession(false);
-      }
-    });
+    if (session) {
+      setTimeout(() => {
+        Swal.fire({
+          title: `Bienvenid@ ${auth.currentUser.displayName || ""}`,
+          text: "Ya puede comenzar a comprar con nosotros!!! ",
+        });
+      }, 1000);
+    }
   }, [session]);
 
   return (
@@ -50,7 +42,7 @@ function App() {
 
           <Route
             path="/e-commerce-react/*"
-            element={<AppRoutes login={session} />}
+            element={<AppRoutes session={session} />}
           />
         </Routes>
       </BrowserRouter>

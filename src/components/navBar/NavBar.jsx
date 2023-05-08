@@ -1,10 +1,11 @@
 import { TbUserOff } from "react-icons/tb";
-import { useRef, useState } from "react";
+import { useRef, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
 
 import CartWidget from "../CartWidget/CartWidget";
 import logoStore from "../../assets/logo.png";
+import { AuthContext } from "../../context/AuthContext";
 
 import { auth } from "../../firebase/config";
 import { signOut } from "firebase/auth";
@@ -12,23 +13,17 @@ import { signOut } from "firebase/auth";
 import "./Navbar.css";
 import "../../stylesheet/gral-styles/site-styles.css";
 
-function Navbar() {
+function Navbar({ navBarBg }) {
+  const { setSession } = useContext(AuthContext);
   let menu = useRef();
   const nav = useRef();
   let navigate = useNavigate();
-  const [click, setClick] = useState(false);
-
-  /*   window.addEventListener("scroll", (e) => {
-    if (document.documentElement.scrollTop > 100) {
-      nav.current.classList.add("scrollBackground");
-    }
-  }); */
 
   const closeSesion = async () => {
     try {
-      sessionStorage.setItem("user", false);
       const userClose = await signOut(auth);
-      navigate("/e-commerce-react/");
+      /* navigate("/e-commerce-react/"); */
+      setSession(false);
     } catch {
       (error) => {
         console.log(error);
@@ -44,7 +39,7 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar" ref={nav}>
+    <div className={navBarBg ? "navbar navBackgroud " : "navbar"} ref={nav}>
       <Link to="/e-commerce-react/Inicio" className="logo">
         <img src={logoStore} alt="logo store" />
       </Link>

@@ -1,11 +1,16 @@
+import { useContext } from "react";
+
 import Item from "./Item";
+import { CartContext } from "../../context/CartContext";
 
 import "./ItemListContainer.css";
 
-function ItemList({ productos }) {
+function ItemList({ products }) {
+  const { lastItem } = useContext(CartContext);
+
   return (
     <div className="item-container">
-      {productos.map((prod) => (
+      {products.map((prod) => (
         <Item
           key={prod.id}
           id={prod.id}
@@ -13,7 +18,11 @@ function ItemList({ productos }) {
           price={prod.price}
           src={prod.src}
           description={prod.description}
-          stock={prod.stock}
+          stock={
+            prod.id != lastItem.id || lastItem.id == ""
+              ? prod.stock
+              : lastItem.stock
+          }
         />
       ))}
     </div>

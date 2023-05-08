@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 import "./Cart.css";
 import "../../stylesheet/gral-styles/site-styles.css";
-import Select from "../Select/Select";
+import Select from "../SelectEl/SelectEl";
 
 export default function Cart() {
   const { cartList, removeList, Amount } = useContext(CartContext);
@@ -23,7 +23,6 @@ export default function Cart() {
   const [errorMessage, setErrorMessage] = useState(false);
 
   let amount = Amount();
-  console.log(cartList);
 
   const setOrder = async () => {
     let order = {
@@ -53,7 +52,7 @@ export default function Cart() {
         confirmButtonText: "Ok",
       }).then((result) => {
         if (result.isConfirmed) {
-          removeList();
+          removeList(true);
           navigate(`/e-commerce-react/my-shop/${orderId.id}`);
         }
       });

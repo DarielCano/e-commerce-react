@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
 import loginImg from "../../../public/nosotros.jpg";
 import logoStore from "../../assets/logo.png";
 import Loader from "../Loader/Loader";
+import { AuthContext } from "../../context/AuthContext";
 
 import Swal from "sweetalert2";
 
@@ -24,8 +25,6 @@ const initialForm = {
   phone: "",
   password: "",
 };
-
-let ps = false;
 
 const validationsForm = (form) => {
   let errors = {};
@@ -55,7 +54,7 @@ const validationsForm = (form) => {
   return errors;
 };
 
-function Login({ session }) {
+function Login() {
   const [login, setLogin] = useState(true);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -63,7 +62,7 @@ function Login({ session }) {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
-  const navigate = useNavigate();
+  const { session, setSession } = useContext(AuthContext);
 
   /* funcion de login */
   const logIn = async (email, password) => {
@@ -80,7 +79,8 @@ function Login({ session }) {
         });
       } else {
         setLoading(false);
-        navigate("/e-commerce-react/Inicio");
+
+        setSession(true);
       }
     } catch (error) {
       setLoading(false);
@@ -97,41 +97,42 @@ function Login({ session }) {
     setLoading(true);
 
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-
-      sendEmailVerification(auth.currentUser).then(() => {
-        setLoading(false);
-        Swal.fire({
-          title: "Usuario Registrado",
-          text: " Diríjase a su bandeja de entrada para verificar su correo",
-        });
-
-        setLogin(true);
+      createUserWithEmailAndPassword(auth, email, password).then(() => {
         updateProfile(auth.currentUser, {
           displayName: auth.currentUser.displayName || name,
           phoneNumber: auth.currentUser.phoneNumber || phone,
-        }).catch((error) => {
-          setLoading(false);
+        });
 
-          if (
-            error.message.includes(
-              "Password should be at least 6 characters (auth/weak-password)"
-            )
-          ) {
-            setErrors({
-              ...errors,
-              password: "La contraseña debe contener mas de 6 caracteres",
-            });
-          } else if (error.message.includes("auth/email-already-in-use")) {
-            setErrors({
-              ...errors,
-              email: "Ya existe un usuario con ese correo",
-            });
-          }
+        sendEmailVerification(auth.currentUser).then(() => {
+          setLoading(false);
+          Swal.fire({
+            title: "Usuario Registrado",
+            text: " Diríjase a su bandeja de entrada para verificar su correo",
+          }).then(() => {
+            setLogin(true);
+          });
         });
       });
     } catch {
-      (error) => console.log(error);
+      (error) => {
+        setLoading(false);
+
+        if (
+          error.message.includes(
+            "Password should be at least 6 characters (auth/weak-password)"
+          )
+        ) {
+          setErrors({
+            ...errors,
+            password: "La contraseña debe contener mas de 6 caracteres",
+          });
+        } else if (error.message.includes("auth/email-already-in-use")) {
+          setErrors({
+            ...errors,
+            email: "Ya existe un usuario con ese correo",
+          });
+        }
+      };
     }
   };
 

@@ -12,8 +12,6 @@ function ItemDetail({ item }) {
 
   const { addToCart } = useContext(CartContext);
 
-  console.log(item);
-
   function onAdd(val, cant) {
     setEndShop(val);
 

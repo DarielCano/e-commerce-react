@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 
@@ -10,11 +10,15 @@ import { db } from "../../firebase/config";
 
 import "./ItemListContainer.css";
 import "../../stylesheet/Filter.css";
+import { CartContext } from "../../context/CartContext";
 
 function ItemListContainer() {
   let { cid } = useParams();
+  const { cartNumProd } = useContext(CartContext);
 
-  let [productos, setProductos] = useState([]);
+  const numProd = cartNumProd();
+
+  let [products, setProducts] = useState([]);
   let [loading, setLoading] = useState(true);
   const [filterState, setFilterState] = useState("");
 
@@ -22,11 +26,11 @@ function ItemListContainer() {
     if (!cid) {
       const q = query(collection(db, "productos"));
       getDocs(q)
-        .then((resp) =>
-          setProductos(
-            resp.docs.map((prod) => ({ id: prod.id, ...prod.data() }))
-          )
-        )
+        .then((resp) => {
+          const nresp = resp.docs.filter((prod) => prod.data().stock > 0);
+
+          setProducts(nresp.map((prod) => ({ id: prod.id, ...prod.data() })));
+        })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));
     } else {
@@ -36,15 +40,14 @@ function ItemListContainer() {
       );
 
       getDocs(q)
-        .then((resp) =>
-          setProductos(
-            resp.docs.map((prod) => ({ id: prod.id, ...prod.data() }))
-          )
-        )
+        .then((resp) => {
+          const nresp = resp.docs.filter((prod) => prod.data().stock > 0);
+          setProducts(nresp.map((prod) => ({ id: prod.id, ...prod.data() })));
+        })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));
     }
-  }, [cid]);
+  }, [cid, numProd]);
 
   const handleFilterChange = (e) => {
     setFilterState(e.target.value);
@@ -70,10 +73,10 @@ function ItemListContainer() {
         </div>
 
         <ItemList
-          productos={
+          products={
             filterState === ""
-              ? productos
-              : productos.filter((prod) =>
+              ? products
+              : products.filter((prod) =>
                   prod.title.toLowerCase().includes(filterState.toLowerCase())
                 )
           }

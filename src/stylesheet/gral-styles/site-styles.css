@@ -42,7 +42,11 @@ a.is-active {
 
 .none {
     display: none;
-    transition: all 1s ease;
+
+}
+
+.navBackgroud {
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
 .opacity {
