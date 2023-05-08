@@ -1,33 +1,37 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-
-import { ToastContainer } from "react-toastify";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
 import AppRoutes from "./route/AppRoutes";
+import { ToastContainer } from "react-toastify";
+
 import { AuthContext } from "./context/AuthContext";
 
 import { auth } from "./firebase/config";
-
-import Swal from "sweetalert2";
+import { onAuthStateChanged } from "firebase/auth";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
+import Swal from "sweetalert2";
+
 function App() {
-  const { session } = useContext(AuthContext);
+  const { session, setSession } = useContext(AuthContext);
 
   useEffect(() => {
-    if (session) {
-      setTimeout(() => {
-        Swal.fire({
-          title: `Bienvenid@ ${auth.currentUser.displayName || ""}`,
-          text: "Ya puede comenzar a comprar con nosotros!!! ",
-        });
-      }, 1000);
-    } else {
-      <Navigate to="/e-commerce-react/" />;
-    }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified == false) {
+          setSession(false);
+        } else {
+          Swal.fire({
+            title: `Bienvenido ${user?.displayName} `,
+            text: " YA puede comprar con nosotros!!",
+          });
+        }
+      } else {
+        setSession(false);
+      }
+    });
   }, [session]);
 
   return (

@@ -4,7 +4,6 @@ import { useNavigate, Navigate } from "react-router-dom";
 import loginImg from "../../../public/nosotros.jpg";
 import logoStore from "../../assets/logo.png";
 import Loader from "../Loader/Loader";
-import { AuthContext } from "../../context/AuthContext";
 
 import Swal from "sweetalert2";
 
@@ -18,6 +17,7 @@ import {
 
 import "./Login.css";
 import "../../stylesheet/gral-styles/site-styles.css";
+import { AuthContext } from "../../context/AuthContext";
 
 const initialForm = {
   name: "",
@@ -25,6 +25,8 @@ const initialForm = {
   phone: "",
   password: "",
 };
+
+let ps = false;
 
 const validationsForm = (form) => {
   let errors = {};
@@ -46,8 +48,6 @@ const validationsForm = (form) => {
 
   if (!form.phone) {
     errors.phone = "El campo teléfono es requerido ";
-  } else if (isNaN(form.phone)) {
-    errors.phone = "Solo se aceptan números en el teléfono ";
   }
 
   if (!form.password.trim()) {
@@ -56,7 +56,7 @@ const validationsForm = (form) => {
   return errors;
 };
 
-function Login() {
+function Login({ session }) {
   const [login, setLogin] = useState(true);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -64,7 +64,9 @@ function Login() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
-  const { session, setSession } = useContext(AuthContext);
+  const { setSession } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   /* funcion de login */
   const logIn = async (email, password) => {
@@ -81,8 +83,8 @@ function Login() {
         });
       } else {
         setLoading(false);
-
         setSession(true);
+        navigate("/e-commerce-react/Inicio");
       }
     } catch (error) {
       setLoading(false);
@@ -99,42 +101,40 @@ function Login() {
     setLoading(true);
 
     try {
-      createUserWithEmailAndPassword(auth, email, password).then(() => {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+
+      sendEmailVerification(auth.currentUser).then(() => {
+        setLoading(false);
+        Swal.fire({
+          title: "Usuario Registrado",
+          text: " Diríjase a su bandeja de entrada para verificar su correo",
+        });
+        setLogin(true);
         updateProfile(auth.currentUser, {
           displayName: auth.currentUser.displayName || name,
           phoneNumber: auth.currentUser.phoneNumber || phone,
-        });
-
-        sendEmailVerification(auth.currentUser).then(() => {
+        }).catch((error) => {
           setLoading(false);
-          Swal.fire({
-            title: "Usuario Registrado",
-            text: " Diríjase a su bandeja de entrada para verificar su correo",
-          }).then(() => {
-            setLogin(true);
-          });
+
+          if (
+            error.message.includes(
+              "Password should be at least 6 characters (auth/weak-password)"
+            )
+          ) {
+            setErrors({
+              ...errors,
+              password: "La contraseña debe contener mas de 6 caracteres",
+            });
+          } else if (error.message.includes("auth/email-already-in-use")) {
+            setErrors({
+              ...errors,
+              email: "Ya existe un usuario con ese correo",
+            });
+          }
         });
       });
     } catch {
-      (error) => {
-        setLoading(false);
-
-        if (
-          error.message.includes(
-            "Password should be at least 6 characters (auth/weak-password)"
-          )
-        ) {
-          setErrors({
-            ...errors,
-            password: "La contraseña debe contener mas de 6 caracteres",
-          });
-        } else if (error.message.includes("auth/email-already-in-use")) {
-          setErrors({
-            ...errors,
-            email: "Ya existe un usuario con ese correo",
-          });
-        }
-      };
+      (error) => console.log(error);
     }
   };
 
@@ -178,7 +178,7 @@ function Login() {
             <img src={loginImg} alt="imagen del login" />
           </div>
           <div className="login-rigth">
-            <img src={logoStore} alt="logo de la FrontEnd Store" />
+            <img src={logoStore} alt="logo de frontend" />
             <div className="login-titles">
               {login ? <h1>Iniciar Sesión</h1> : <h1>Registrarse</h1>}
             </div>

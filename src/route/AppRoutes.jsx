@@ -1,18 +1,16 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "../components/navBar/NavBar";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import ItemListContainer from "../components/itemListContainer/ItemListContainer";
 import ItemDetailContainer from "../components/itemDetailContainer/ItemDetailContainer";
 import Cart from "../components/Cart/Cart";
 import ShopContainer from "../components/ShopContainer/ShopContainer";
-import { AuthContext } from "../context/AuthContext";
 
 import "../App.css";
 
-function AppRoutes() {
-  const { session } = useContext(AuthContext);
+function AppRoutes({ session }) {
   const [navBarBg, setNavBarBg] = useState(false);
 
   const changeNavBackground = () => {
