@@ -21,7 +21,6 @@ function Navbar({ navBarBg }) {
   const closeSesion = async () => {
     try {
       const userClose = await signOut(auth);
-
       setSession(false);
     } catch {
       (error) => {

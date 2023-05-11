@@ -23,10 +23,15 @@ function App() {
         if (user.emailVerified == false) {
           setSession(false);
         } else {
-          Swal.fire({
-            title: `Bienvenido ${user?.displayName} `,
-            text: " YA puede comprar con nosotros!!",
-          });
+          if (!session) {
+            setTimeout(() => {
+              Swal.fire({
+                title: `Bienvenido ${user.displayName ?? " "} `,
+                text: " YA puede comprar con nosotros!!",
+              });
+            }, 2000);
+          }
+          setSession(true);
         }
       } else {
         setSession(false);

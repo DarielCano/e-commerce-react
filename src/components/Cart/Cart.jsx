@@ -106,9 +106,7 @@ export default function Cart() {
         </div>
         {viewShop && (
           <div className="shop-Id">
-            <p>
-              Para consultar su orden de compra inserte su Id de la compra:{" "}
-            </p>
+            <p>Para consultar su orden de compra inserte su Id de la compra:</p>
             <div className="shop-Id-search">
               <input
                 type="text"

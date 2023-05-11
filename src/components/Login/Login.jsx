@@ -32,7 +32,8 @@ const validationsForm = (form) => {
   let errors = {};
   let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
   let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
-  /*  let regexPhone = ^([+]?[]?[0-9]{3}[]?[-\s\.]?[0-9]{3}]?[0-9]{4,6}$ */
+  let regexPhone =
+    /^\+?([0-9]{2})\)?[-]?([0-9]{3})[ ]?([0-9]{3})?[-]?([0-9]{4})$/;
 
   if (!form.email.trim()) {
     errors.email = "El campo email es requerido";
@@ -48,8 +49,11 @@ const validationsForm = (form) => {
 
   if (!form.phone) {
     errors.phone = "El campo teléfono es requerido ";
+  } else if (isNaN(form.phone)) {
+    errors.phone = "Solo se aceptan números en el teléfono ";
+  } else if (regexPhone.test(form.phone.trim()) == false) {
+    errors.phone = "Número inválido ";
   }
-
   if (!form.password.trim()) {
     errors.password = "El campo password es requerido";
   }

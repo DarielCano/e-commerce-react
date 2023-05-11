@@ -64,8 +64,8 @@
 
 .userOff-btn {
     color: var(--blanco);
-    width: 3rem;
-    height: 3rem;
+    width: 2.3rem;
+    height: 2.3rem;
     margin-top: 0.8rem;
     grid-column: 1;
     grid-row: 1;
@@ -75,7 +75,7 @@
 .right-icons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 0.5rem;
     justify-self: flex-end;
 }
 
@@ -109,9 +109,10 @@
 .burguer-btn {
 
     fill: var(--blanco);
-    width: 3rem;
-    height: 3rem;
+    width: 2.3rem;
+    height: 2.3rem;
     margin-top: 1rem;
+    margin-left: 0.5rem;
 
     cursor: pointer;
 }

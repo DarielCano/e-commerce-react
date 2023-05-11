@@ -20,9 +20,9 @@ function Item({ id, title, price, src, description, stock }) {
 
   return (
     <div className={stock > 0 ? "item-card " : "none"}>
-      <a className="item-card__img" href="#">
+      <Link className="item-card__img" to={`/e-commerce-react/detail/${id}`}>
         <img src={src} alt={description} />
-      </a>
+      </Link>
       <div className="item-card__info">
         <h3>{title}</h3>
         <strong>${price}</strong>

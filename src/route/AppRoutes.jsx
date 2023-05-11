@@ -34,6 +34,7 @@ function AppRoutes({ session }) {
             <Route path="detail/:pid" element={<ItemDetailContainer />} />
             <Route path="cart" element={<Cart />} />
             <Route path="my-shop/:shopId" element={<ShopContainer />} />
+            <Route path="*" element={<Navigate to="Inicio" />} />
           </Routes>
         </>
       ) : (
