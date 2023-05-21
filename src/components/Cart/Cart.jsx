@@ -109,8 +109,12 @@ export default function Cart() {
         if (result.isConfirmed) {
           setIsOpen(true);
         } else {
-          setUserLogin(false);
-          navigate("/e-commerce-react/login");
+          if (result.isDenied) {
+            setUserLogin(false);
+            navigate("/e-commerce-react/login");
+          } else {
+            navigate("/e-commerce-react/cart");
+          }
         }
       });
     }
