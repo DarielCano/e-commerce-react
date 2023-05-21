@@ -1,43 +1,32 @@
-import { useContext, useEffect } from "react";
+import { useContext, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
-import AppRoutes from "./route/AppRoutes";
+
 import { ToastContainer } from "react-toastify";
+import Navbar from "./components/navBar/NavBar";
+import ItemListContainer from "./components/itemListContainer/ItemListContainer";
+import ItemDetailContainer from "./components/itemDetailContainer/ItemDetailContainer";
+import Cart from "./components/Cart/Cart";
+import ShopContainer from "./components/ShopContainer/ShopContainer";
+import Error404 from "./pages/Error404";
 
 import { AuthContext } from "./context/AuthContext";
-
-import { auth } from "./firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
-import Swal from "sweetalert2";
-
 function App() {
-  const { session, setSession } = useContext(AuthContext);
+  const [navBarBg, setNavBarBg] = useState(false);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (user.emailVerified == false) {
-          setSession(false);
-        } else {
-          if (!session) {
-            setTimeout(() => {
-              Swal.fire({
-                title: `Bienvenido ${user.displayName ?? " "} `,
-                text: " YA puede comprar con nosotros!!",
-              });
-            }, 2000);
-          }
-          setSession(true);
-        }
-      } else {
-        setSession(false);
-      }
-    });
-  }, [session]);
+  const changeNavBackground = () => {
+    if (window.scrollY >= 100) {
+      setNavBarBg(true);
+    } else {
+      setNavBarBg(false);
+    }
+  };
+
+  window.addEventListener("scroll", changeNavBackground);
 
   return (
     <div className="myApp">
@@ -47,13 +36,54 @@ function App() {
         <Routes>
           <Route
             path="/e-commerce-react/"
-            element={<Login session={session} />}
+            element={
+              <>
+                <Navbar navBarBg={navBarBg} />
+                <ItemListContainer />
+              </>
+            }
           />
 
           <Route
-            path="/e-commerce-react/*"
-            element={<AppRoutes session={session} />}
+            path="/e-commerce-react/category/:cid"
+            element={
+              <>
+                <Navbar navBarBg={navBarBg} />
+                <ItemListContainer />
+              </>
+            }
           />
+
+          <Route
+            path="/e-commerce-react/detail/:pid"
+            element={
+              <>
+                <Navbar navBarBg={navBarBg} />
+                <ItemDetailContainer />
+              </>
+            }
+          />
+          <Route
+            path="/e-commerce-react/cart"
+            element={
+              <>
+                <Navbar navBarBg={navBarBg} />
+                <Cart />
+              </>
+            }
+          />
+          <Route
+            path="/e-commerce-react/my-shop/:shopId"
+            element={
+              <>
+                <Navbar navBarBg={navBarBg} />
+                <ShopContainer />
+              </>
+            }
+          />
+          <Route path="*" element={<Error404 />} />
+
+          <Route path="/e-commerce-react/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>

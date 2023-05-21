@@ -1,22 +1,34 @@
 import { createContext, useEffect, useState } from "react";
+import { auth } from "../firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
+import Swal from "sweetalert2";
 
 export const AuthContext = createContext([]);
 
 export function AuthContextProvider({ children }) {
-  const [session, setSession] = useState(() => {
-    let localSession = sessionStorage.getItem("session");
-    if (localSession) {
-      return (localSession = sessionStorage.getItem("session"));
-    } else {
-      return false;
-    }
+  const [userLogin, setUserLogin] = useState(() => {
+    if (auth.currentUser !== null) return true;
+    else return false;
   });
 
   useEffect(() => {
-    sessionStorage.setItem("session", session);
-  }, [session]);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserLogin(true);
+        if (user.emailVerified) {
+          setTimeout(() => {
+            Swal.fire({
+              title: `Bienvenid@ ${user.displayName ?? " "} `,
+              text: " YA puede comprar con nosotros!!",
+            });
+          }, 2000);
+        }
+      }
+    });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ setSession, session }}>
+    <AuthContext.Provider value={{ userLogin, setUserLogin }}>
       {children}
     </AuthContext.Provider>
   );

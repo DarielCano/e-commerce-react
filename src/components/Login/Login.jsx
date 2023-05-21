@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import loginImg from "../../../public/nosotros.jpg";
 import logoStore from "../../assets/logo.png";
@@ -17,7 +17,6 @@ import {
 
 import "./Login.css";
 import "../../stylesheet/gral-styles/site-styles.css";
-import { AuthContext } from "../../context/AuthContext";
 
 const initialForm = {
   name: "",
@@ -60,15 +59,13 @@ const validationsForm = (form) => {
   return errors;
 };
 
-function Login({ session }) {
+function Login() {
   const [login, setLogin] = useState(true);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-
-  const { setSession } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -81,14 +78,13 @@ function Login({ session }) {
       if (!auth.currentUser.emailVerified) {
         setLoading(false);
         Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe verificar su correo electrónico. Diríjase a su bandeja de entrada",
-        });
+          icon: "warning",
+          title: "Validar email",
+          text: "Debe verificar su correo electrónico para poder enviarle notificaciones",
+        }).then((result) => navigate("/e-commerce-react/"));
       } else {
         setLoading(false);
-        setSession(true);
-        navigate("/e-commerce-react/Inicio");
+        navigate("/e-commerce-react/");
       }
     } catch (error) {
       setLoading(false);
@@ -149,7 +145,10 @@ function Login({ session }) {
       ...form,
       [name]: value,
     });
-    setErrors(validationsForm(form, passwordConfirm));
+  };
+
+  const handleBlur = () => {
+    setErrors(validationsForm(form));
   };
 
   /* control del Submit Login */
@@ -165,7 +164,7 @@ function Login({ session }) {
   const handleSubmitRegister = (e) => {
     e.preventDefault();
 
-    if (form.password !== passwordConfirm) {
+    if (!passwordConfirm || form.password !== passwordConfirm) {
       setErrorPassword("Las contraseñas no coinciden");
     } else {
       setErrorPassword("");
@@ -174,140 +173,144 @@ function Login({ session }) {
       }
     }
   };
-  if (!session) {
-    return (
-      <div className="login">
-        <div className="login-content">
-          <div className="login-img">
-            <img src={loginImg} alt="imagen del login" />
+
+  return (
+    <div className="login">
+      <div className="login-content">
+        <div className="login-img">
+          <img src={loginImg} alt="imagen del login" />
+        </div>
+        <div className="login-rigth">
+          <img src={logoStore} alt="logo de frontend" />
+          <div className="login-titles">
+            {login ? <h1>Iniciar Sesión</h1> : <h1>Registrarse</h1>}
           </div>
-          <div className="login-rigth">
-            <img src={logoStore} alt="logo de frontend" />
-            <div className="login-titles">
-              {login ? <h1>Iniciar Sesión</h1> : <h1>Registrarse</h1>}
-            </div>
-            {login ? (
-              <form onSubmit={handleSubmitLogin} className="login-inputs">
-                <input
-                  name="email"
-                  onChange={handleChange}
-                  type="email"
-                  required
-                  placeholder="Ingrese su email"
-                  value={form.email}
-                />
-                {errors.email && <p className="input-errors">{errors.email}</p>}
-                <input
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  required
-                  placeholder="Ingrese su contraseña"
-                  value={form.password}
-                />
-                {errors.password && (
-                  <p className="input-errors">{errors.password}</p>
-                )}
-                {loading && (
-                  <div className="sesion-loader">
-                    <Loader />
-                  </div>
-                )}
-                <div className="login-buttons">
-                  <input
-                    type="submit"
-                    className="btn"
-                    value={login ? "Iniciar Sesión" : "Registrarse"}
-                  />
+          {login ? (
+            <form onSubmit={handleSubmitLogin} className="login-inputs">
+              <input
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="email"
+                required
+                placeholder="Ingrese su email"
+                value={form.email}
+              />
+              {errors.email && <p className="input-errors">{errors.email}</p>}
+              <input
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="password"
+                required
+                autoComplete="off"
+                placeholder="Ingrese su contraseña"
+                value={form.password}
+              />
+              {errors.password && (
+                <p className="input-errors">{errors.password}</p>
+              )}
+              {loading && (
+                <div className="sesion-loader">
+                  <Loader />
                 </div>
+              )}
+              <div className="login-buttons">
+                <input
+                  type="submit"
+                  className="btn"
+                  value={login ? "Iniciar Sesión" : "Registrarse"}
+                />
+              </div>
 
-                {login && (
-                  <p className="input-question">
-                    No tiene cuenta?
-                    <button onClick={() => setLogin(false)}>Crear una</button>
-                  </p>
-                )}
-              </form>
-            ) : (
-              <form onSubmit={handleSubmitRegister} className="login-inputs">
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  required
-                  onChange={handleChange}
-                  placeholder="Ingrese su nombre"
-                />
-                {errors.name && <p className="input-errors">{errors.name}</p>}
-                <input
-                  name="email"
-                  onChange={handleChange}
-                  type="email"
-                  required
-                  placeholder="Ingrese su email"
-                  value={form.email}
-                />
-                {errors.email && <p className="input-errors">{errors.email}</p>}
-                <input
-                  type="text"
-                  name="phone"
-                  value={form.phone}
-                  required
-                  onChange={handleChange}
-                  placeholder="Ingrese su número de teléfono"
-                />
-                {errors.phone && <p className="input-errors">{errors.phone}</p>}
-                <input
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  required
-                  placeholder="Ingrese su contraseña"
-                  value={form.password}
-                />
-                {errors.password && (
-                  <p className="input-errors">{errors.password}</p>
-                )}
-                <input
-                  name="passwordConfirm"
-                  onChange={(e) => {
-                    setPasswordConfirm(e.target.value);
-                  }}
-                  type="password"
-                  required
-                  placeholder="Confirmar contraseña"
-                  value={passwordConfirm}
-                />
-                {}
-                {errorPassword && (
-                  <p className="input-errors">Las constraseñas no coinciden</p>
-                )}
-
-                {loading && (
-                  <div className="sesion-loader">
-                    <Loader />
-                  </div>
-                )}
-                <div className="login-buttons">
-                  <input
-                    type="submit"
-                    className="btn"
-                    value={login ? "Iniciar Sesión" : "Registrarse"}
-                  />
-                </div>
+              {login && (
                 <p className="input-question">
-                  Ya tiene cuenta?
-                  <button onClick={() => setLogin(true)}>
-                    Ir a Inicio de Sesión
-                  </button>
+                  No tiene cuenta?
+                  <button onClick={() => setLogin(false)}>Crear una</button>
                 </p>
-              </form>
-            )}
-          </div>
+              )}
+            </form>
+          ) : (
+            <form onSubmit={handleSubmitRegister} className="login-inputs">
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                required
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Ingrese su nombre"
+              />
+              {errors.name && <p className="input-errors">{errors.name}</p>}
+              <input
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="email"
+                required
+                placeholder="Ingrese su email"
+                value={form.email}
+              />
+              {errors.email && <p className="input-errors">{errors.email}</p>}
+              <input
+                type="text"
+                name="phone"
+                value={form.phone}
+                required
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Ingrese su número de teléfono"
+              />
+              {errors.phone && <p className="input-errors">{errors.phone}</p>}
+              <input
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="password"
+                required
+                placeholder="Ingrese su contraseña"
+                value={form.password}
+              />
+              {errors.password && (
+                <p className="input-errors">{errors.password}</p>
+              )}
+              <input
+                name="passwordConfirm"
+                onChange={(e) => {
+                  setPasswordConfirm(e.target.value);
+                }}
+                type="password"
+                required
+                placeholder="Confirmar contraseña"
+                value={passwordConfirm}
+              />
+              {}
+              {errorPassword && <p className="input-errors">{errorPassword}</p>}
+
+              {loading && (
+                <div className="sesion-loader">
+                  <Loader />
+                </div>
+              )}
+              <div className="login-buttons">
+                <input
+                  type="submit"
+                  className="btn"
+                  value={login ? "Iniciar Sesión" : "Registrarse"}
+                />
+              </div>
+              <p className="input-question">
+                Ya tiene cuenta?
+                <button onClick={() => setLogin(true)}>
+                  Ir a Inicio de Sesión
+                </button>
+              </p>
+            </form>
+          )}
         </div>
       </div>
-    );
-  }
-  return <Navigate to="/e-commerce-react/Inicio" />;
+    </div>
+  );
 }
+
 export default Login;

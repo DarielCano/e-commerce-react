@@ -86,7 +86,8 @@ const ShopContainer = () => {
           ) : (
             <div className="shop-detail-container">
               <small className="shop-detail-name">
-                Aquí te mostramos tu compra {orderToShow.buyer?.name}
+                Aquí te mostramos tu compra
+                <span> {orderToShow.buyer?.name}</span>
               </small>
 
               <div className="shop-show">
@@ -114,7 +115,7 @@ const ShopContainer = () => {
             Cancelar compra
           </button>
 
-          <BtnLink btnName={"Regresar"} btnLink={"/e-commerce-react/Inicio"} />
+          <BtnLink btnName={"Regresar"} btnLink={"/e-commerce-react/"} />
         </div>
       </div>
     );

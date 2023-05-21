@@ -45,6 +45,12 @@
 
 }
 
+.shop-detail-name span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .no-shopping-text {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     background-color: red;

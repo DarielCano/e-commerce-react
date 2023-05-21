@@ -1,17 +1,19 @@
 .shop-cart {
     padding-top: 0.3rem;
-    width: 2.3rem;
-    height: 2.1rem;
+    width: 2rem;
+    height: 2rem;
     position: relative;
     cursor: pointer;
     grid-column: 3;
+    margin: 0 auto;
+
 }
 
 .shop-cart p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: absolute;
-    top: -35px;
-    right: -8px;
+    top: -32px;
+    right: -12px;
     font-size: 1.2rem;
     font-weight: bold;
     color: white;

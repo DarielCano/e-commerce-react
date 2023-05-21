@@ -1,4 +1,4 @@
-import { TbUserOff } from "react-icons/tb";
+import { TbUserOff, TbUser } from "react-icons/tb";
 import { useRef, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -14,14 +14,27 @@ import "./Navbar.css";
 import "../../stylesheet/gral-styles/site-styles.css";
 
 function Navbar({ navBarBg }) {
-  const { setSession } = useContext(AuthContext);
+  const { userLogin, setUserLogin } = useContext(AuthContext);
+
   let menu = useRef();
   const nav = useRef();
+  const navigate = useNavigate();
 
-  const closeSesion = async () => {
+  const sesionName = () => {
+    const nameData = auth.currentUser.displayName.split(" ");
+
+    return nameData[0];
+  };
+  const startSession = () => {
+    setUserLogin(false);
+    navigate("/e-commerce-react/login");
+  };
+
+  const closeSession = async () => {
+    setUserLogin(false);
+    navigate("/e-commerce-react/");
     try {
       const userClose = await signOut(auth);
-      setSession(false);
     } catch {
       (error) => {
         console.log(error);
@@ -38,7 +51,7 @@ function Navbar({ navBarBg }) {
 
   return (
     <div className={navBarBg ? "navbar navBackgroud " : "navbar"} ref={nav}>
-      <Link to="/e-commerce-react/Inicio" className="logo">
+      <Link to="/e-commerce-react/" className="logo">
         <img src={logoStore} alt="logo store" />
       </Link>
 
@@ -72,7 +85,18 @@ function Navbar({ navBarBg }) {
           </ul>
         </nav>
         <div className="right-icons">
-          <TbUserOff className="userOff-btn" onClick={closeSesion} />
+          {userLogin == true ? (
+            <div className="user-access" onClick={closeSession}>
+              <p>{sesionName()}</p>
+              <TbUserOff className="userOff-btn" />
+            </div>
+          ) : (
+            <div className="user-access" onClick={startSession}>
+              <p>Acceder</p>
+              <TbUser className="userOff-btn" />
+            </div>
+          )}
+
           <AiOutlineMenu className="burguer-btn" onClick={handleMenu} />
 
           <Link className="shop-cart" to="/e-commerce-react/cart">

@@ -18,6 +18,15 @@
 
 }
 
+.warn-btn {
+    color: #FAF84A;
+    margin-bottom: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+
+
+}
+
 .cart-user strong {
     margin-left: 10px;
     font-family: var(--fuente-btn);
@@ -44,8 +53,9 @@
 
 .cartEmpty h2 {
     text-align: center;
-    font-size: 3rem;
-    color: var(--blanco);
+    font-size: 2.5rem;
+    color: #FAF84A;
+    margin-bottom: 3rem;
 }
 
 .cartView table {
@@ -149,6 +159,15 @@ td {
     font-size: 2rem;
     margin-left: 1rem;
 
+}
+
+.input-errors {
+    color: var(--blanco);
+    width: 100%;
+    background-color: red;
+    text-align: center;
+    margin-top: 5px;
+    padding: 0.5rem;
 }
 
 @media screen and (min-width:700px) {

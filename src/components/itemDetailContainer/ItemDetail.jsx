@@ -41,7 +41,7 @@ function ItemDetail({ item }) {
 
               <BtnLink
                 btnName={"Seguir comprando"}
-                btnLink={"/e-commerce-react/Inicio"}
+                btnLink={"/e-commerce-react/"}
                 mgt={true}
               />
             </div>
